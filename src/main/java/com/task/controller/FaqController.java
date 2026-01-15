@@ -31,6 +31,7 @@ public class FaqController {
     }
 
 
+
     @GetMapping("/find/{faq_id}")
     public ResponseEntity<ApiResponse<List<FaqVO>>> findById(@PathVariable int faq_id) {
         List<FaqVO> list = faqService.findById(faq_id);
