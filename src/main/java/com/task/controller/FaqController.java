@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/faq")
+
 public class FaqController {
     private final FaqService faqService;
 
