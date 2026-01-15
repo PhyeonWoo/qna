@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.task.model.Qna.dao.QnaDAO">
+
+
+    <insert id="insertQna" useGeneratedKeys="true" keyProperty="qna_id">
+        INSERT INTO qna (title,content,writer)
+        VALUES (#{title},#{content},#{writer})
+    </insert>
+
+    <insert id="insertComment">
+        INSERT INTO qna_comment (qna_id,content,writer)
+        VALUES (#{qna_id},#{content},#{writer})
+    </insert>
+
+
+    <select id="findAll" resultType="com.task.model.Qna.vo.QnaVO">
+        SELECT * FROM qna ORDER BY qna_id DESC
+    </select>
+
+    <select id="findComplete" resultType="com.task.model.Qna.vo.QnaVO">
+        SELECT qna_id, title, content, writer, status, view_cnt, created_at, updated_at, deleted_at
+        FROM qna WHERE status = "COMMPLETE"
+    </select>
+
+    <!--별칭을 쓰는 이유는 컬럼명이 겹치는 경우 value값을 이상하게 넣을 경우가 있기 때문에-->
+    <select id="findById" resultType="map">
+        SELECT
+
+        q.qna_id AS qna_id,
+        q.title AS qna_title,
+        q.content AS qna_content,
+        q.writer AS qna_writer,
+        q.status AS qna_status,
+        q.view_cnt AS qna_view_cnt,
+        DATE_FORMAT(q.created_at, '%Y-%m-%d %H:%i:%s') AS qna_create,
+        DATE_FORMAT(q.updated_at, '%Y-%m-%d %H:%i:%s') AS qna_update,
+        DATE_FORMAT(q.deleted_at, '%Y-%m-%d %H:%i:%s') AS qna_delete,
+
+        c.comment_id AS comment_id,
+        c.content AS comment_content,
+        c.writer AS comment_writer,
+        DATE_FORMAT(c.created_at, '%Y-%m-%d %H:%i:%s') AS comment_create,
+        DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s') AS comment_update
+
+        FROM qna q
+        LEFT OUTER JOIN qna_comment c
+        ON q.qna_id = c.qna_id
+        WHERE q.qna_id = #{qna_id}
+    </select>
+
+    <update id="updateCnt">
+        UPDATE qna SET view_cnt = view_cnt + 1 WHERE qna_id=#{qna_id}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE qna SET status="COMMPLETE" WHERE qna_id=#{qna_id}
+    </update>
+
+    <update id="updateQna" parameterType="com.task.model.Qna.vo.QnaVO">
+        UPDATE qna SET title=#{title},content=#{content},writer=#{writer},updated_at = NOW()
+        WHERE qna_id = #{qna_id}
+    </update>
+
+
+    <update id="updateComment" parameterType="com.task.model.Qna.vo.CommentVO">
+        UPDATE qna_comment SET content=#{content},writer=#{writer},updated_at = NOW()
+        WHERE comment_id = #{comment_id}
+    </update>
+
+
+    <delete id="deleteQna">
+        UPDATE qna
+        SET deleted_at = NOW()
+        WHERE qna_id = #{qna_id}
+    </delete>
+
+</mapper>
