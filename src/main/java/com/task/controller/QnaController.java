@@ -29,10 +29,10 @@ public class QnaController {
         return ResponseEntity.ok(ApiResponse.createSuccess(all));
     }
 
-
     @GetMapping("/find/{qna_id}")
     public ResponseEntity<ApiResponse<List<QnaVO>>> findById(@PathVariable int qna_id) {
         List<QnaVO> list = qnaService.findById(qna_id);
+        qnaService.updateCnt(qna_id);
         return ResponseEntity.ok(ApiResponse.createSuccess(list));
     }
 

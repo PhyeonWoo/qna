@@ -36,10 +36,11 @@ public class QnaService {
         return qnaDAO.findById(qna_id);
     }
 
-    //답변 완료된 qna만 조회 - ing
+    //답변 완료된 qna만 조회
     public List<QnaVO> findComplete() {
         return qnaDAO.findComplete();
     }
+
 
     //수정
     public void updateQna(QnaRequestDTO qnaRequestDTO,int qna_id) {

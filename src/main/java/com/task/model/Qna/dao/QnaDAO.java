@@ -11,16 +11,13 @@ public interface QnaDAO {
 
     //추가
     void insertQna(QnaVO qnaVO);
-
     void insertComment(CommentVO commentVO);
 
 
     //전체 조회
     List<QnaVO> findAll();
-
     //ID별로 Qna 조회
     List<QnaVO> findById(int qna_id); // Comment 까지 같이 출력
-
     // 답변 완료된 질문만 조회
     List<QnaVO> findComplete();
 
